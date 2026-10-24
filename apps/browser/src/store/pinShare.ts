@@ -42,6 +42,11 @@ export function holderOf(s: BrowserState, id: string): Tab | undefined {
   return best;
 }
 
+export function isPageUnloaded(s: BrowserState, id: string): boolean {
+  const t = s.tabs[id];
+  return !!t?.url && !hasPage(t) && !t.pageIn && !holderOf(s, id);
+}
+
 const swapIds = (ids: string[], a: string, b: string) => {
   if (!ids.includes(a) && !ids.includes(b)) return ids;
   return ids.map((x) => (x === a ? b : x === b ? a : x));

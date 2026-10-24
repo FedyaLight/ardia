@@ -71,8 +71,6 @@ export function makeTab(windowId: string, profileId: string, url = "", snapshot?
   };
 }
 
-export const isPageUnloaded = (t: Tab | undefined): boolean => !!t?.url && !t.navigation && !t.adoptId && !t.pageIn;
-
 export function wake(t: Tab): Partial<Tab> {
   return t.wakeAdoptId ? { adoptId: t.wakeAdoptId, wakeAdoptId: undefined } : { navigation: navigationTo(t.url) };
 }
