@@ -31,3 +31,15 @@ test("a tab counts as unloaded only while it has no page anywhere", () => {
   assert.ok(S().tabs[frozen].pageIn, "A's copy shows the page B now holds");
   assert.equal(unloaded(frozen), false, "a pin live in another window");
 });
+
+test("a pin whose live page sits in a split can't be handed over, so its copy counts as unloaded", () => {
+  S().hydrate({});
+  const a = S().createWindow({ url: "https://mail.com" });
+  const [mail] = S().windows[a].tabIds;
+  const regular = S().newTab(a, { url: "https://docs.com", background: true });
+  S().pinTabs([mail], true);
+  S().activate(mail);
+  S().createSplit([mail, regular]);
+  const b = S().createWindow({ url: "https://b.com" });
+  assert.equal(unloaded(tileOf(b, "https://mail.com")), true);
+});
